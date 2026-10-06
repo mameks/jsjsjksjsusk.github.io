@@ -1,0 +1,1430 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pazarikov — Электронный дневник 5Б</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#eef4ff,#f9fbff);
+  color:#172033;
+  min-height:100vh
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.wrap{
+  width:min(1080px,calc(100% - 24px));
+  margin:auto
+}
+
+.card{
+  background:#fff;
+  border-radius:22px;
+  box-shadow:0 18px 50px #536b9c20
+}
+
+.login{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px
+}
+
+.login-card{
+  width:min(400px,100%);
+  padding:30px;
+  animation:up .5s ease
+}
+
+@keyframes up{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:none}
+}
+
+.logo{
+  margin:auto auto 16px;
+  width:70px;
+  height:70px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#5d7cff,#7c5cff);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:22px
+}
+
+h1,h2{margin-top:0}
+.center{text-align:center}
+.muted{color:#7a8699}
+
+.field{margin:15px 0}
+
+.field label{
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:7px
+}
+
+input,select,textarea{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid #d9e1ee;
+  border-radius:12px;
+  outline:0;
+  background:#fff
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#6684ff;
+  box-shadow:0 0 0 4px #6684ff18
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical
+}
+
+.primary,.secondary,.danger{
+  border-radius:12px;
+  padding:12px 15px;
+  font-weight:700
+}
+
+.primary{
+  border:0;
+  background:#5d7cff;
+  color:white
+}
+
+.primary:hover{
+  background:#4f70f1
+}
+
+.secondary{
+  border:1px solid #dbe2ee;
+  background:#fff;
+  color:#344054
+}
+
+.danger{
+  border:0;
+  background:#fff0f0;
+  color:#d84848
+}
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:#ffffffdf;
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #e8edf4
+}
+
+.topin{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.brand{
+  font-size:20px;
+  font-weight:800
+}
+
+.brand b{color:#5d7cff}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:9px
+}
+
+.badge{
+  background:#eef2ff;
+  color:#536fe5;
+  padding:7px 10px;
+  border-radius:99px;
+  font-size:12px;
+  font-weight:700
+}
+
+main{
+  padding:28px 0 60px
+}
+
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px
+}
+
+.hero h1{
+  font-size:30px;
+  margin-bottom:6px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px
+}
+
+.panel{
+  padding:21px
+}
+
+.panel h2{
+  font-size:20px
+}
+
+.hw{
+  border:1px solid #e4e9f2;
+  border-radius:16px;
+  padding:17px;
+  margin-bottom:12px
+}
+
+.hwhead{
+  display:flex;
+  justify-content:space-between;
+  gap:10px
+}
+
+.subject{
+  font-weight:800;
+  font-size:18px
+}
+
+.date{
+  color:#788498;
+  font-size:13px
+}
+
+.text{
+  white-space:pre-wrap;
+  line-height:1.5;
+  margin:12px 0
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+  flex-wrap:wrap
+}
+
+.empty{
+  text-align:center;
+  color:#8a95a7;
+  padding:35px 10px
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#17203366;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  z-index:20
+}
+
+.modalbox{
+  width:min(550px,100%);
+  max-height:90vh;
+  overflow:auto;
+  padding:23px
+}
+
+.modalhead{
+  display:flex;
+  justify-content:space-between
+}
+
+.close{
+  border:0;
+  background:#f0f3f7;
+  border-radius:50%;
+  width:36px;
+  height:36px;
+  font-size:20px
+}
+
+.account{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #edf0f5
+}
+
+.toast{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  background:#172033;
+  color:#fff;
+  padding:12px 15px;
+  border-radius:12px;
+  z-index:50
+}
+
+.hero5b{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:22px;
+  padding:30px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#6d5dfc,#8f7cff 48%,#55c7ff);
+  color:#fff;
+  box-shadow:0 18px 45px rgba(87,76,190,.22)
+}
+
+.hero5b h1{
+  margin:0 0 8px;
+  font-size:clamp(30px,5vw,48px)
+}
+
+.hero5b p{
+  margin:0;
+  opacity:.9
+}
+
+.hero5b-bubbles{
+  display:flex;
+  gap:10px;
+  margin-top:22px;
+  flex-wrap:wrap
+}
+
+.hero5b-bubbles span{
+  padding:9px 13px;
+  border-radius:13px;
+  background:#ffffff25;
+  font-size:13px;
+  font-weight:600
+}
+
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .hero{
+    align-items:flex-start;
+    flex-direction:column
+  }
+  .user .badge{display:none}
+  .login-card{padding:24px 19px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ВХОД -->
+
+<div id="loginPage" class="login">
+
+  <div class="card login-card">
+
+    <div class="logo">P</div>
+
+    <h1 class="center">Pazarikov</h1>
+
+    <p class="muted center">
+      Электронный дневник 5 «Б»
+    </p>
+
+    <form id="loginForm">
+
+      <div class="field">
+        <label>Логин</label>
+        <input
+          id="login"
+          autocomplete="username"
+          placeholder="Введите логин"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Введите пароль"
+          required
+        >
+      </div>
+
+      <div
+        id="loginError"
+        class="center"
+        style="color:#d84848;min-height:20px;font-size:13px"
+      ></div>
+
+      <button class="primary">
+        Войти
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ПРИЛОЖЕНИЕ -->
+
+<div id="app" class="hidden">
+
+<header class="top">
+
+  <div class="wrap topin">
+
+    <div class="brand">
+      Pazarikov <b>5 «Б»</b>
+    </div>
+
+    <div class="user">
+
+      <span id="roleBadge" class="badge"></span>
+
+      <span id="userName"></span>
+
+      <button class="secondary" onclick="logout()">
+        Выйти
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+<main class="wrap">
+
+<section class="hero5b">
+
+  <h1>Электронный дневник 5Б</h1>
+
+  <p>
+    Домашние задания и всё важное для нашего класса.
+  </p>
+
+  <div class="hero5b-bubbles">
+    <span>📚 Учимся</span>
+    <span>📝 Выполняем</span>
+    <span>🚀 Двигаемся вперёд</span>
+  </div>
+
+</section>
+
+
+<div class="hero">
+
+  <div>
+    <h1>Домашнее задание</h1>
+
+    <div class="muted">
+      Задания класса в одном месте
+    </div>
+  </div>
+
+  <div id="teacherTools" class="hidden">
+
+    <button class="primary" onclick="openHW()">
+      ＋ Добавить ДЗ
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="grid">
+
+<section class="card panel">
+
+  <h2>📚 Задания</h2>
+
+  <div id="homeworkList"></div>
+
+</section>
+
+
+<section id="adminPanel" class="card panel hidden">
+
+  <h2>👥 Аккаунты</h2>
+
+  <button class="primary" onclick="openAccount()">
+    ＋ Добавить аккаунт
+  </button>
+
+  <div id="accounts" style="margin-top:12px"></div>
+
+</section>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- МОДАЛКА ДЗ -->
+
+<div id="hwModal" class="modal hidden">
+
+<div class="card modalbox">
+
+<div class="modalhead">
+
+<h2 id="hwTitle">Добавить ДЗ</h2>
+
+<button
+class="close"
+onclick="closeModal('hwModal')"
+>×</button>
+
+</div>
+
+<form id="hwForm">
+
+<input id="hwId" type="hidden">
+
+<div class="field">
+<label>Предмет</label>
+<input id="subject" required placeholder="Математика">
+</div>
+
+<div class="field">
+<label>Дата</label>
+<input id="date" type="date" required>
+</div>
+
+<div class="field">
+<label>Задание</label>
+<textarea
+id="hwText"
+required
+placeholder="Что нужно сделать?"
+></textarea>
+</div>
+
+<button class="primary" style="width:100%">
+Сохранить
+</button>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- МОДАЛКА АККАУНТА -->
+
+<div id="accountModal" class="modal hidden">
+
+<div class="card modalbox">
+
+<div class="modalhead">
+
+<h2>Новый аккаунт</h2>
+
+<button
+class="close"
+onclick="closeModal('accountModal')"
+>×</button>
+
+</div>
+
+<form id="accountForm">
+
+<div class="field">
+<label>Имя</label>
+<input id="accName" required>
+</div>
+
+<div class="field">
+<label>Логин</label>
+<input id="accLogin" required>
+</div>
+
+<div class="field">
+<label>Пароль</label>
+<input id="accPass" type="password" required>
+</div>
+
+<div class="field">
+<label>Роль</label>
+
+<select id="accRole">
+<option value="student">Ученик</option>
+<option value="teacher">Учитель</option>
+<option value="admin">Администратор</option>
+</select>
+
+</div>
+
+<button class="primary" style="width:100%">
+Создать
+</button>
+
+</form>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   АККАУНТЫ
+   ========================= */
+
+const USERS_KEY = "pazarikov_users_v1";
+const HW_KEY = "pazarikov_hw_v1";
+const SESSION_KEY = "pazarikov_session_v1";
+
+
+const users = [
+
+  {
+    name:"Марк",
+    login:"Марк",
+    password:"bobik",
+    role:"admin"
+  },
+
+  {
+    name:"Наталия",
+    login:"natalia41",
+    password:"v8z5x2c1",
+    role:"teacher"
+  },
+
+  {
+    name:"vekти1",
+    login:"vekти1",
+    password:"JAxEsxfqEJ",
+    role:"student"
+  },
+
+  {
+    name:"vekти2",
+    login:"vekти2",
+    password:"xEX74xPz2k",
+    role:"student"
+  },
+
+  {
+    name:"vekти3",
+    login:"vekти3",
+    password:"kYzZhoLNrN",
+    role:"student"
+  },
+
+  {
+    name:"vekти4",
+    login:"vekти4",
+    password:"cthBev3rTx",
+    role:"student"
+  },
+
+  {
+    name:"vekти5",
+    login:"vekти5",
+    password:"a429aHDZMw",
+    role:"student"
+  },
+
+  {
+    name:"vekти6",
+    login:"vekти6",
+    password:"fFH4izEMs4",
+    role:"student"
+  },
+
+  {
+    name:"vekти7",
+    login:"vekти7",
+    password:"8tcDUNQbtL",
+    role:"student"
+  },
+
+  {
+    name:"vekти8",
+    login:"vekти8",
+    password:"PPGmzs2gfa",
+    role:"student"
+  },
+
+  {
+    name:"vekти9",
+    login:"vekти9",
+    password:"r2ZJc5mGJx",
+    role:"student"
+  },
+
+  {
+    name:"vekти10",
+    login:"vekти10",
+    password:"Qa7c6Nq7SA",
+    role:"student"
+  },
+
+  {
+    name:"vekти11",
+    login:"vekти11",
+    password:"bDNgcaGfyd",
+    role:"student"
+  },
+
+  {
+    name:"vekти12",
+    login:"vekти12",
+    password:"rHwBFrYSrg",
+    role:"student"
+  },
+
+  {
+    name:"vekти13",
+    login:"vekти13",
+    password:"eXpSNyKBBy",
+    role:"student"
+  },
+
+  {
+    name:"vekти14",
+    login:"vekти14",
+    password:"Jcr9MwvLof",
+    role:"student"
+  },
+
+  {
+    name:"vekти15",
+    login:"vekти15",
+    password:"f23haVBWyh",
+    role:"student"
+  },
+
+  {
+    name:"vekти16",
+    login:"vekти16",
+    password:"GeLnEFUrYu",
+    role:"student"
+  },
+
+  {
+    name:"vekти17",
+    login:"vekти17",
+    password:"4vz6gNSf3w",
+    role:"student"
+  },
+
+  {
+    name:"vekти18",
+    login:"vekти18",
+    password:"hbkXurvj9c",
+    role:"student"
+  },
+
+  {
+    name:"vekти19",
+    login:"vekти19",
+    password:"BddbXzx2dB",
+    role:"student"
+  },
+
+  {
+    name:"vekти20",
+    login:"vekти20",
+    password:"K8TrP8GpRf",
+    role:"student"
+  },
+
+  {
+    name:"vekти21",
+    login:"vekти21",
+    password:"8rHSVFVQ57",
+    role:"student"
+  },
+
+  {
+    name:"vekти22",
+    login:"vekти22",
+    password:"6z2YQ9VQZC",
+    role:"student"
+  },
+
+  {
+    name:"vekти23",
+    login:"vekти23",
+    password:"uD6YFhx7uj",
+    role:"student"
+  },
+
+  {
+    name:"vekти24",
+    login:"vekти24",
+    password:"mb5nDKsfiu",
+    role:"student"
+  },
+
+  {
+    name:"vekти25",
+    login:"vekти25",
+    password:"GUkZSftdB3",
+    role:"student"
+  },
+
+  {
+    name:"vekти26",
+    login:"vekти26",
+    password:"k7kexb8zvf",
+    role:"student"
+  },
+
+  {
+    name:"vekти27",
+    login:"vekти27",
+    password:"WnDkyMvE3A",
+    role:"student"
+  },
+
+  {
+    name:"vekти28",
+    login:"vekти28",
+    password:"UvFrr8pF3v",
+    role:"student"
+  },
+
+  {
+    name:"vekти29",
+    login:"vekти29",
+    password:"P4EZpcUjwK",
+    role:"student"
+  },
+
+  {
+    name:"vekти30",
+    login:"vekти30",
+    password:"m7uJYxrMhQ",
+    role:"student"
+  },
+
+  {
+    name:"vekти31",
+    login:"vekти31",
+    password:"mt9wLhN5jA",
+    role:"student"
+  },
+
+  {
+    name:"vekти32",
+    login:"vekти32",
+    password:"ZbGJJGvwBV",
+    role:"student"
+  },
+
+  {
+    name:"vekти33",
+    login:"vekти33",
+    password:"LsHUjMPaVv",
+    role:"student"
+  },
+
+  {
+    name:"vekти34",
+    login:"vekти34",
+    password:"uXG4hvecVF",
+    role:"student"
+  }
+
+];
+
+
+/* =========================
+   ДАННЫЕ
+   ========================= */
+
+let homework =
+  JSON.parse(
+    localStorage.getItem(HW_KEY) || "[]"
+  );
+
+let currentUser = null;
+
+
+/* =========================
+   ФУНКЦИИ
+   ========================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+function roleName(role){
+
+  if(role === "admin")
+    return "Администратор";
+
+  if(role === "teacher")
+    return "Учитель";
+
+  return "Ученик";
+
+}
+
+
+function saveHomework(){
+
+  localStorage.setItem(
+    HW_KEY,
+    JSON.stringify(homework)
+  );
+
+}
+
+
+function closeModal(id){
+
+  $(id).classList.add("hidden");
+
+}
+
+
+function toast(message){
+
+  const t =
+    document.createElement("div");
+
+  t.className = "toast";
+  t.textContent = message;
+
+  document.body.appendChild(t);
+
+  setTimeout(
+    () => t.remove(),
+    2000
+  );
+
+}
+
+
+/* =========================
+   ВХОД
+   ========================= */
+
+$("loginForm").onsubmit = function(e){
+
+  e.preventDefault();
+
+  const login =
+    $("login").value.trim();
+
+  const password =
+    $("password").value;
+
+  const user =
+    users.find(
+      u =>
+        u.login === login &&
+        u.password === password
+    );
+
+  if(!user){
+
+    $("loginError").style.display =
+      "block";
+
+    $("loginError").textContent =
+      "Неверный логин или пароль";
+
+    return;
+
+  }
+
+  currentUser = user;
+
+  localStorage.setItem(
+    SESSION_KEY,
+    user.login
+  );
+
+  openApp();
+
+};
+
+
+function openApp(){
+
+  $("loginPage")
+    .classList
+    .add("hidden");
+
+  $("app")
+    .classList
+    .remove("hidden");
+
+  $("userName").textContent =
+    currentUser.name;
+
+  $("roleBadge").textContent =
+    roleName(currentUser.role);
+
+  const canManage =
+    currentUser.role === "admin" ||
+    currentUser.role === "teacher";
+
+  $("teacherTools")
+    .classList
+    .toggle(
+      "hidden",
+      !canManage
+    );
+
+  $("adminPanel")
+    .classList
+    .toggle(
+      "hidden",
+      !canManage
+    );
+
+  renderHomework();
+  renderAccounts();
+
+}
+
+
+/* =========================
+   ВЫХОД
+   ========================= */
+
+function logout(){
+
+  currentUser = null;
+
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+  $("app")
+    .classList
+    .add("hidden");
+
+  $("loginPage")
+    .classList
+    .remove("hidden");
+
+  $("loginForm").reset();
+
+  $("loginError").style.display =
+    "none";
+
+}
+
+
+/* =========================
+   ДЗ
+   ========================= */
+
+function renderHomework(){
+
+  const box =
+    $("homeworkList");
+
+  if(!homework.length){
+
+    box.innerHTML =
+      '<div class="empty">Пока нет домашних заданий.</div>';
+
+    return;
+
+  }
+
+  box.innerHTML =
+    homework.map(hw => `
+
+      <article class="homework">
+
+        <div class="homework-title">
+          ${escapeHTML(hw.subject)}
+        </div>
+
+        <div class="homework-date">
+          ${escapeHTML(hw.date)}
+        </div>
+
+        <div>
+          ${escapeHTML(hw.text)}
+        </div>
+
+        ${
+          currentUser.role === "admin" ||
+          currentUser.role === "teacher"
+
+          ? `
+
+            <div class="actions">
+
+              <button
+                class="delete"
+                onclick="deleteHW('${hw.id}')"
+              >
+                Удалить
+              </button>
+
+            </div>
+
+          `
+
+          : ""
+
+        }
+
+      </article>
+
+    `).join("");
+
+}
+
+
+function openHW(){
+
+  $("hwForm").reset();
+
+  $("hwModal")
+    .classList
+    .remove("hidden");
+
+}
+
+
+$("hwForm").onsubmit = function(e){
+
+  e.preventDefault();
+
+  homework.push({
+
+    id:String(Date.now()),
+
+    subject:
+      $("subject").value.trim(),
+
+    date:
+      $("date").value,
+
+    text:
+      $("hwText").value.trim()
+
+  });
+
+  saveHomework();
+
+  renderHomework();
+
+  closeModal("hwModal");
+
+  toast("ДЗ добавлено");
+
+};
+
+
+function deleteHW(id){
+
+  if(!confirm("Удалить задание?"))
+    return;
+
+  homework =
+    homework.filter(
+      hw => hw.id !== id
+    );
+
+  saveHomework();
+
+  renderHomework();
+
+  toast("ДЗ удалено");
+
+}
+
+
+/* =========================
+   АККАУНТЫ
+   ========================= */
+
+function openAccount(){
+
+  $("accountForm").reset();
+
+  $("accountModal")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function renderAccounts(){
+
+  if(!currentUser)
+    return;
+
+  if(
+    currentUser.role !== "admin" &&
+    currentUser.role !== "teacher"
+  )
+    return;
+
+  const box =
+    $("accounts");
+
+  box.innerHTML =
+    users.map((u,index) => `
+
+      <div class="account">
+
+        <div>
+
+          <div class="account-name">
+            ${escapeHTML(u.name)}
+          </div>
+
+          <div class="account-login">
+            ${escapeHTML(u.login)}
+            ·
+            ${roleName(u.role)}
+          </div>
+
+        </div>
+
+        ${
+          currentUser.role === "admin"
+
+          ? `
+
+            <div class="account-actions">
+
+              <select
+                onchange="changeRole(${index},this.value)"
+              >
+
+                <option
+                  value="student"
+                  ${u.role==="student"?"selected":""}
+                >
+                  Ученик
+                </option>
+
+                <option
+                  value="teacher"
+                  ${u.role==="teacher"?"selected":""}
+                >
+                  Учитель
+                </option>
+
+                <option
+                  value="admin"
+                  ${u.role==="admin"?"selected":""}
+                >
+                  Администратор
+                </option>
+
+              </select>
+
+            </div>
+
+          `
+
+          : ""
+
+        }
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/*
+  Роли изменяются только
+  в текущем браузере.
+  Для постоянного хранения
+  позже понадобится сервер.
+*/
+
+function changeRole(index,newRole){
+
+  if(currentUser.role !== "admin")
+    return;
+
+  users[index].role = newRole;
+
+  /*
+    Если меняем собственную роль,
+    обновляем текущего пользователя.
+  */
+
+  if(
+    users[index].login === currentUser.login
+  ){
+
+    currentUser =
+      users[index];
+
+    $("roleBadge").textContent =
+      roleName(currentUser.role);
+
+  }
+
+  renderAccounts();
+
+  toast("Роль изменена");
+
+}
+
+
+/* =========================
+   СОЗДАНИЕ АККАУНТА
+   ========================= */
+
+$("accountForm").onsubmit = function(e){
+
+  e.preventDefault();
+
+  if(currentUser.role !== "admin"){
+    alert(
+      "Только администратор может создавать аккаунты."
+    );
+    return;
+  }
+
+  const name =
+    $("accName").value.trim();
+
+  const login =
+    $("accLogin").value.trim();
+
+  const password =
+    $("accPass").value;
+
+  const role =
+    $("accRole").value;
+
+  if(
+    users.some(
+      u => u.login === login
+    )
+  ){
+
+    alert(
+      "Такой логин уже существует."
+    );
+
+    return;
+
+  }
+
+  users.push({
+
+    name,
+    login,
+    password,
+    role
+
+  });
+
+  renderAccounts();
+
+  closeModal("accountModal");
+
+  toast("Аккаунт создан");
+
+};
+
+
+/* =========================
+   ЭКРАНИРОВАНИЕ
+   ========================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      })[c]
+    );
+
+}
+
+
+/* =========================
+   ЗАКРЫТИЕ МОДАЛКИ
+   ========================= */
+
+window.onclick = function(e){
+
+  if(
+    e.target.classList.contains("modal")
+  ){
+
+    e.target.classList.add("hidden");
+
+  }
+
+};
+
+
+/* =========================
+   АВТОВОССТАНОВЛЕНИЕ
+   ========================= */
+
+const savedLogin =
+  localStorage.getItem(
+    SESSION_KEY
+  );
+
+if(savedLogin){
+
+  const found =
+    users.find(
+      u => u.login === savedLogin
+    );
+
+  if(found){
+
+    currentUser = found;
+
+    openApp();
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
